@@ -25,6 +25,8 @@ $ npm run start:prod
 
 ## API Documentation
 
+[Postman collection can be found here](./docs/cobbleweb-test.postman_collection.json)
+
 ### Register new client:
 
 ```

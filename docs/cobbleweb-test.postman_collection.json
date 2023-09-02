@@ -1,0 +1,133 @@
+{
+	"info": {
+		"_postman_id": "ed929ee2-2b06-4427-bb15-b9882c725cff",
+		"name": "Cobbleweb test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18963175"
+	},
+	"item": [
+		{
+			"name": "POST /api/auth/register",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "sergey@mbp.local",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "pass123",
+							"type": "text"
+						},
+						{
+							"key": "firstName",
+							"value": "Sergey",
+							"type": "text"
+						},
+						{
+							"key": "lastName",
+							"value": "Ulyashev",
+							"type": "text"
+						},
+						{
+							"key": "photos",
+							"type": "file",
+							"src": [
+								"/Users/sergey/Downloads/img_04.jpg",
+								"/Users/sergey/Downloads/img_03.jpg",
+								"/Users/sergey/Downloads/img_02.jpeg",
+								"/Users/sergey/Downloads/img_01.jpeg"
+							]
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /api/auth/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"sergey@mbp.local\",\n    \"password\": \"pass111\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /api/users/me",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTM2NTI3NjEsImV4cCI6MTY5MzczOTE2MX0.ED-dgl-Lo4s1KbyM5OnhNT_-axNzgknorj7QUiJ1bmY",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/api/users/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"users",
+						"me"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
