@@ -4,6 +4,9 @@
 $ npm install
 ```
 
+## Configuration
+Copy file `.env.example` to `.env` and fill env variables for DB/JWT/AWS.
+
 ## Running the DB
 
 ```bash
