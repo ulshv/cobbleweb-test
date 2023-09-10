@@ -1,3 +1,9 @@
+# Cobbleweb Test Backend
+
+```bash
+$ cd backend
+```
+
 ## Installation
 
 ```bash
@@ -112,4 +118,22 @@ Responses:
 
   On auth error:
     { "statusCode": 401, "message": Authorization token is not provided / is invalid }
+```
+
+# Cobbleweb Test frontend
+
+```bash
+$ cd frontend
+```
+
+## Installation
+
+```bash
+$ npm install
+```
+
+## Running the app
+
+```bash
+$ npm start
 ```
