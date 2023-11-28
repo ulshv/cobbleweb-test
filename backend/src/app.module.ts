@@ -12,7 +12,7 @@ import { S3Module } from './s3/s3.module';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: '127.0.0.1',
-      port: 5432,
+      port: parseInt(process.env.DB_PORT, 10) || 5432,
       username: 'postgres',
       password: process.env.POSTGRES_PASSWORD,
       database: 'postgres',

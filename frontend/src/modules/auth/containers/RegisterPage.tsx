@@ -1,84 +1,48 @@
-import React, { ChangeEvent, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import { Button, TextField } from '@mui/material';
+
+import { useStore } from 'modules/shared';
+import { registerSchema } from '../schemas/registerSchema';
 
 import Centered from '../components/Centered';
 import Card from '../components/Card';
 import LoginHint from '../components/LoginHint';
 import Title from '../components/Title';
-import { API_URL } from '../constants';
-import { registerSchema } from '../schemas/registerSchema';
-import { formatError } from '../utils';
+import AuthForm from '../components/AuthForm';
+import ApiError from '../components/ApiError';
+import SubmitWrapper from '../components/SubmitWrapper';
+import PhotosSelectWrapper from '../components/PhotosSelectWrapper';
+import PhotosSelectInfo from '../components/PhotosSelectInfo';
+
+const initialFormValues = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+};
 
 const RegisterPage = () => {
-  const navigate = useNavigate();
-  const [serverError, setServerError] = useState('');
-
-  const [fileList, setFileList] = useState<FileList | null>(null);
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFileList(e.target.files);
-  };
-
-  const files = fileList ? [...fileList] : [];
+  const { authStore } = useStore();
+  const { registerError, registerPhotos } = authStore;
 
   return (
     <Centered>
-      <Card style={{ width: 400 }}>
+      <Card>
         <Title>Register</Title>
 
         <Formik
-          initialValues={{
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-          }}
+          initialValues={initialFormValues}
           validationSchema={registerSchema}
           onSubmit={(values, { setSubmitting }) => {
-            const data = new FormData();
-
-            data.append('firstName', values.firstName);
-            data.append('lastName', values.lastName);
-            data.append('email', values.email);
-            data.append('password', values.password);
-
-            files.forEach((file) => {
-              data.append('photos', file, file.name);
-            });
-
-            fetch(`${API_URL}/api/auth/register`, {
-              method: 'POST',
-              body: data,
-            })
-              .then((res) => res.json())
-              .then((data) => {
-                if (data.success) {
-                  alert(
-                    `You've successfuly registered. Now, please log in with your credentials.`,
-                  );
-                  navigate('/login');
-                } else {
-                  throw new Error(formatError(data.message));
-                }
-              })
-              .catch((err) => {
-                setServerError(err.message);
-              })
-              .finally(() => setSubmitting(false));
+            authStore.register(values, setSubmitting);
           }}
         >
           {(formik) => (
-            <form
-              onSubmit={formik.handleSubmit}
-              style={{ display: 'flex', flexDirection: 'column' }}
-            >
-              {Boolean(serverError) && (
-                <div style={{ marginBottom: 12, color: 'red' }}>
-                  {serverError}
-                </div>
-              )}
+            <AuthForm onSubmit={formik.handleSubmit}>
+              {Boolean(registerError) && <ApiError>{registerError}</ApiError>}
 
               <TextField
                 {...formik.getFieldProps('firstName')}
@@ -123,45 +87,41 @@ const RegisterPage = () => {
                 }
               />
 
-              <div
-                style={{
-                  margin: '16px 0',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
+              <PhotosSelectWrapper>
                 <Button variant="outlined" component="label">
                   Select Photos
                   <input
-                    onChange={handleFileChange}
+                    onChange={(ev) => authStore.setPhotos(ev)}
                     type="file"
                     hidden
                     multiple
                     accept="image/png, image/jpeg"
                   />
                 </Button>
-                <div
+
+                <PhotosSelectInfo
                   style={{
-                    marginLeft: 8,
-                    fontSize: 12,
-                    color: files.length && files.length < 4 ? 'red' : 'black',
+                    color:
+                      registerPhotos.length && registerPhotos.length < 4
+                        ? 'red'
+                        : 'black',
                   }}
                 >
-                  {files.length >= 4
-                    ? `${files.length} photos selected`
+                  {registerPhotos.length >= 4
+                    ? `${registerPhotos.length} photos selected`
                     : 'At least 4 photos should be selected'}
 
                   <br />
-                </div>
-              </div>
+                </PhotosSelectInfo>
+              </PhotosSelectWrapper>
 
-              <div style={{ margin: '16px 0' }}>
+              <SubmitWrapper>
                 <Button
                   disabled={
                     formik.isSubmitting ||
                     !formik.dirty ||
                     !formik.isValid ||
-                    files.length < 4
+                    registerPhotos.length < 4
                   }
                   type="submit"
                   variant="contained"
@@ -169,12 +129,12 @@ const RegisterPage = () => {
                 >
                   Register
                 </Button>
-              </div>
+              </SubmitWrapper>
 
               <LoginHint>
                 Already have an account? Please <Link to="/login">login</Link>.
               </LoginHint>
-            </form>
+            </AuthForm>
           )}
         </Formik>
       </Card>
@@ -182,4 +142,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default observer(RegisterPage);
