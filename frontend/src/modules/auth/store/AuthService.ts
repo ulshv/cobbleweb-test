@@ -14,7 +14,7 @@ type RegisterResponse = {
 
 export class AuthService {
   async login({ email, password }: LoginParams): Promise<LoginResponse> {
-    return fetch(`${API_URL}/api/auth/login`, {
+    return fetch(`${API_URL}/api/login`, {
       method: 'POST',
       headers: {
         ['Content-Type']: 'application/json',
@@ -40,7 +40,7 @@ export class AuthService {
       data.append('photos', file, file.name);
     });
 
-    return fetch(`${API_URL}/api/auth/register`, {
+    return fetch(`${API_URL}/api/register`, {
       method: 'POST',
       body: data,
     })

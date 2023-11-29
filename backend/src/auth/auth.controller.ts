@@ -13,7 +13,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 
-@Controller('api/auth')
+@Controller('api')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
